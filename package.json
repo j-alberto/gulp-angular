@@ -1,0 +1,20 @@
+{
+  "name": "example1",
+  "version": "0.0.1",
+  "description": "test JS building tools",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "nvm",
+    "nodejs",
+    "npm",
+    "gulp"
+  ],
+  "author": "Jorge Rojas",
+  "license": "AFL-3.0",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
