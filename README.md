@@ -22,7 +22,7 @@ Is already installed, but we want the latest version
 	npm -v
 
 # Initialize the project:
-## init project in npm
+## Init project in npm
 	npm init	(Creates a package.json file, after answering a few questions)
 	npm install gulp [-D|g] to insall gulp dependency in project folder or globally
 	npm install gulp-sass gulp-jshint gulp-concat gulp-uglify gulp-rename -D
@@ -34,6 +34,13 @@ Is already installed, but we want the latest version
 	mkdir app/fonts
 	mkdir app/img
 
-Anyway, the gulpfile.js in the project already contains a started configuration. To verify, simply run ```gulp```, at the end should show something similar to this:
+a new folder ``node_modules`` is created. Anyway, the gulpfile.js in the project already contains a started configuration. To verify, simply run ```gulp```, at the end should show something similar to this:
 	Finished 'default' after 5.98 μs
 
+
+## Install bower to manage dependencies
+	npm install -g bower
+	npm install -D gulp-clean gulp-sequence
+	bower install angular bootstrap
+
+A new folder `` bower_components`` is created

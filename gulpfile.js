@@ -1,21 +1,29 @@
-var gulp = require('gulp');
-var jshint = require('gulp-jshint');
-var sass = require('gulp-sass');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
+var gulp = require('gulp')
+	,jshint = require('gulp-jshint')
+	,sass = require('gulp-sass')
+	,concat = require('gulp-concat')
+	,uglify = require('gulp-uglify')
+	,rename = require('gulp-rename')
+	,connect = require('gulp-connect')
+	,sequence = require('gulp-sequence')
+	,clean = require('gulp-clean');
 
+var bowerJSLibs = [
+	'bower_components/angular/angular.min.js',
+	'bower_components/bootstrap/dist/js/bootstrap.min.js'
+];
 
-gulp.task('lint', function() {
-    return gulp.src('js/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
+var bowerCSSLibs = ['bower_components/bootstrap/dist/css/bootstrap.min.css'];
 
-gulp.task('sass', function() {
-    return gulp.src('scss/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('dist/css'));
+var buildFolder = 'build';
+var cssFolder = buildFolder+'/css'
+	,jsFolder = buildFolder+'/js'
+	,imgFolder = buildFolder+'/img'
+	,templateFolder = buildFolder+'/templates';
+
+gulp.task('clean', function() {
+	return  gulp.src(buildFolder+'/')
+		.pipe(clean());
 });
 
 // Lint Task
@@ -29,18 +37,41 @@ gulp.task('lint', function() {
 gulp.task('sass', function() {
     return gulp.src('scss/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('dist/css'));
+        .pipe(gulp.dest(cssFolder));
 });
 
 // Concatenate & Minify JS
 gulp.task('scripts', function() {
     return gulp.src('js/*.js')
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist'))
-        .pipe(rename('all.min.js'))
+        .pipe(concat('application.js'))
+        .pipe(gulp.dest(jsFolder))
+        .pipe(rename('application.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest(jsFolder));
 });
+
+//Copy templates
+gulp.task('templates', function(){
+	gulp.src('*.html')
+		.pipe(gulp.dest(buildFolder));
+	return gulp.src('app/templates/**/*.html')
+		.pipe(gulp.dest(templateFolder));
+});
+
+// Add dependencies
+gulp.task('libmin-js',function(){
+	return gulp.src(bowerJSLibs)
+		.pipe(concat('lib.min.js'))
+		.pipe(gulp.dest(jsFolder));
+});
+
+gulp.task('libmin-css',function(){
+	return gulp.src(bowerCSSLibs)
+		.pipe(concat('lib.min.css'))
+		.pipe(gulp.dest(cssFolder));
+});
+
+gulp.task('libmin',['libmin-js','libmin-css']);
 
 // Watch Files For Changes
 gulp.task('watch', function() {
@@ -48,5 +79,17 @@ gulp.task('watch', function() {
     gulp.watch('scss/*.scss', ['sass']);
 });
 
+gulp.task('server', function() {
+    connect.server({
+    	livereload:true,
+    	port:8081,
+    	root: 'build',
+    	fallback: 'build/error.html'
+    });
+});
+
+
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', function(){
+	sequence('clean',['lint', 'sass', 'scripts','templates', 'libmin', 'server', 'watch'],function(){});
+});
