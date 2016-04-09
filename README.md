@@ -25,7 +25,7 @@ Is already installed, but we want the latest version
 ## Init project in npm
 	npm init	(Creates a package.json file, after answering a few questions)
 	npm install gulp [-D|g] to insall gulp dependency in project folder or globally
-	npm install gulp-sass gulp-jshint gulp-concat gulp-uglify gulp-rename -D
+	npm install -D gulp-sass gulp-jshint gulp-concat gulp-uglify gulp-rename gulp-clean gulp-sequence
 
 	mkdir app
 	mkdir app/css
@@ -40,7 +40,6 @@ a new folder ``node_modules`` is created. Anyway, the gulpfile.js in the project
 
 ## Install bower to manage dependencies
 	npm install -g bower
-	npm install -D gulp-clean gulp-sequence
 	bower install angular bootstrap
 
 A new folder `` bower_components`` is created
